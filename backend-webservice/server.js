@@ -1,13 +1,16 @@
 "use strict";
 
 const serverPort = 3000,
+    dotenv = require('dotenv').config(),
     http = require("http"),
     express = require("express"),
+    mongoose = require('mongoose'),
     app = express(),
-    server = http.createServer(app),
     WebSocket = require("ws"),
-    websocketServer = new WebSocket.Server({ server }),
     nameGenerator = require("fantasy-name-generator");
+
+const server = http.createServer(app),
+    websocketServer = new WebSocket.Server({ server });
 
 //when a websocket connection is established
 websocketServer.on('connection', (webSocketClient) => {
@@ -31,8 +34,21 @@ websocketServer.on('connection', (webSocketClient) => {
         webSocketClient.send("You just sent " + message)
     });
 });
-
+var dbControlller = require('./db/db_controller');
+const execTest = async () => {
+    console.log(await dbControlller.listTurtles())
+}
 //start the web server
-server.listen(serverPort, () => {
+server.listen(serverPort, async () => {
     console.log(`Websocket server started on port ` + serverPort);
+    console.log("Connecting to database...")
+    try {
+        let response = await mongoose.connect(process.env.DB_CONNECTION)
+        if (response) {
+            console.log("Connection successfull.")
+            try { execTest() } catch (e) { console.log("Test error: ", e) }
+        }
+    } catch (e) {
+        console.log("Error trying to connect to database: " + e)
+    }
 });
