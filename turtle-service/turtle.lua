@@ -22,7 +22,7 @@ if(gps.locate() == not nil) then
     end
   
     
-    WS.send('{"type":"turtle", "position":{"x":'..x..',"y":'..y..',"z":'..z..'},"id":'..computerID..',"name":"'..computerName..'"}')    
+    WS.send('{"reason":"connection","type":"turtle", "position":{"x":'..x..',"y":'..y..',"z":'..z..'},"id":'..computerID..',"name":"'..computerName..'"}')    
 else
     local computerID = os.getComputerID()
     local computerName = "nil"
