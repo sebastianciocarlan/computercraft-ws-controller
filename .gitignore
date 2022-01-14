@@ -1,3 +1,4 @@
 frontend-threejs/node_modules
 backend-webservice/node_modules
 node_modules/
+.ENV
